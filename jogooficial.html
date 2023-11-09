@@ -23,7 +23,7 @@
         }
 
         .barrier2 {
-            width: 40px;
+            width: 60px;
             height: 100px;
             background-size: cover;
             position: absolute;
@@ -40,8 +40,8 @@
         }
 
         .coin {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 50px;
             background-size: cover;
             position: absolute;
         }
@@ -60,7 +60,8 @@
         <div id="game-container">
             <img id="car" src="Imagens/carro.png" alt="Carro">
         </div>
-        <p>Pontuação: <span id="score">0</span></p>
+        <p>Pontuação da Apple: <span id="score">0</span></p>
+        <p>Pontuação da AT&T: <span id="score1">0</span></p>
     </center>
 
 
@@ -68,7 +69,9 @@
         let gameContainer = document.getElementById("game-container");
         let car = document.getElementById("car");
         let scoreDisplay = document.getElementById("score");
+        let scoreDisplay1 = document.getElementById("score1");
         let score = 0;
+        let score1 = 0;
 
         let speedInterval = 1000;
         let carPosition = 50;
@@ -102,7 +105,7 @@
             coin.style.left = randomLeft + "px";
             gameContainer.appendChild(coin);
 
-            changeCoinImage(coin, "Imagens/pepsi.png");
+            changeCoinImage(coin, "Imagens/Apple-Logo_resized.png");
 
             let coinInterval = setInterval(() => {
                 let currentTop = parseInt(coin.style.top) || 0;
@@ -114,8 +117,9 @@
                     score++;
                     scoreDisplay.textContent = score;
                 }
-
-
+                if(score >= 2){
+                    gameOver2();
+                }
                 if (currentTop >= gameContainer.clientHeight - 20) {
                     gameContainer.removeChild(coin);
                 }
@@ -153,10 +157,9 @@
 
                 if (checkCollision(coin2, car)) {
                     gameContainer.removeChild(coin2);
-                    score++;
-                    scoreDisplay.textContent = score;
+                    score1++;
+                    scoreDisplay1.textContent = score1;
                 }
-
 
                 if (currentTop >= gameContainer.clientHeight - 20) {
                     gameContainer.removeChild(coin2);
@@ -223,7 +226,7 @@
             barrier2.style.top = "0";
             gameContainer.appendChild(barrier2);
 
-            barrier2.style.backgroundImage = "url('Imagens/barreira2.png')";
+            barrier2.style.backgroundImage = "url('Imagens/barreira3-removebg-preview.png')";
 
             gameContainer.appendChild(barrier2);
 
@@ -234,7 +237,7 @@
 
                 if (checkCollision(barrier2, car)) {
                     clearInterval(barrier2Interval);
-                    gameOver();
+                    gameOver1();
                 }
 
                 if (currentTop >= gameContainer.clientHeight - 80) {
@@ -254,7 +257,15 @@
             );
         }
         function gameOver() {
-            alert("Game Over! Sua pontuação foi: " + score);
+            alert("Acabou! Você bateu na polícia e a lei antitruste te pegou.\nVocê foi obrigado a deixar de ser um monopólio e tem que se dividir\nVocê fez " + score + " pontos antes de se dividir");
+            document.location.reload();
+        }
+        function gameOver1() {
+            alert("Acabou! Você bateu na pepsi e vai ter que vender água com açúcar para sempre\n Você fez " + score1 + " pontos antes de continuar na pepsi");
+            document.location.reload();
+        }
+        function gameOver2() {
+            alert("Acabou! Você bateu na pepsi e vai ter que vender água com açúcar para sempre\n Você fez " + score1 + " pontos antes de continuar na pepsi");
             document.location.reload();
         }
 
@@ -270,6 +281,7 @@
                 speedInterval -= 100;
             }
         }, 10000);
+
     </script>
 </body>
 
