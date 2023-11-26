@@ -72,7 +72,6 @@
         let pontuacaoDisplay1 = document.getElementById("pontuacao1")
         let pontuacao = 0
         let pontuacao1 = 0
-
         let velocidade = 1000
         let carroPosição = 50
 
@@ -116,8 +115,8 @@
                     pontuacaoDisplay.textContent = pontuacao;
                 }
 
-                if (pontuacao >= 5) {
-                    gameOver1();
+                if (pontuacao >= 2) {
+                    gameOver2();
                 }
 
                 if (Topo >= caixaJogo.clientHeight - moeda.clientHeight) {
@@ -125,16 +124,7 @@
                 }
             }, 20);
         }
-        function checarColisao(moeda, carro) {
-            let reacaoMoeda = moeda.getBoundingClientRect();
-            let reacaoCarro = carro.getBoundingClientRect();
-            return (
-                reacaoMoeda.right > reacaoCarro.left &&
-                reacaoMoeda.left < reacaoCarro.right &&
-                reacaoMoeda.bottom > reacaoCarro.top &&
-                reacaoMoeda.top < reacaoCarro.bottom
-            );
-        }
+
         //moeda2
         function mudarImagemMoeda2(moeda2, newImageSrc) {
             moeda2.style.backgroundImage = `url('${newImageSrc}')`;
@@ -154,13 +144,13 @@
                 moeda2.style.top = Topo + 5 + "px";
 
 
-                if (checarColisao2(moeda2, carro)) {
+                if (checarColisao(moeda2, carro)) {
                     caixaJogo.removeChild(moeda2);
                     pontuacao1++;
                     pontuacaoDisplay1.textContent = pontuacao1;
                 }
-                if (pontuacao1 >= 5) {
-                    gameOver();
+                if (pontuacao1 >= 2) {
+                    gameOver3();
                 }
                 if (Topo >= caixaJogo.clientHeight - moeda2.clientHeight) {
                     caixaJogo.removeChild(moeda2);
@@ -169,16 +159,6 @@
 
         }
 
-        function checarColisao2(moeda2, carro) {
-            let reacaoMoeda2 = moeda2.getBoundingClientRect();
-            let reacaoCarro = carro.getBoundingClientRect();
-            return (
-                reacaoMoeda2.right > reacaoCarro.left &&
-                reacaoMoeda2.left < reacaoCarro.right &&
-                reacaoMoeda2.bottom > reacaoCarro.top &&
-                reacaoMoeda2.top < reacaoCarro.bottom
-            );
-        }
         //Barreira 1
         function criarBarreira() {
             let barreira = document.createElement("div");
@@ -197,9 +177,9 @@
                 barreira.style.top = Topo + 5 + "px";
 
 
-                if (checarColisao3(barreira, carro)) {
-                    clearIntervalo(barreiraIntervalo);
-                    gameOver1();
+                if (checarColisao(barreira, carro)) {
+                    clearInterval(barreiraIntervalo);
+                    gameOver();
                 }
 
                 if (Topo >= caixaJogo.clientHeight - 80) {
@@ -208,16 +188,7 @@
             }, 20);
         }
 
-        function checarColisao3(barreira, carro) {
-            let reacao1 = barreira.getBoundingClientRect();
-            let reacao2 = carro.getBoundingClientRect();
-            return (
-                reacao1.right > reacao2.left &&
-                reacao1.left < reacao2.right &&
-                reacao1.bottom > reacao2.top &&
-                reacao1.top < reacao2.bottom
-            );
-        }
+
         /*----------------------------------------------------------------------------------*/
         //barreira2
         function criarBarreira2() {
@@ -237,7 +208,7 @@
                 barreira2.style.top = Topo + 5 + "px";
 
 
-                if (checarColisao4(barreira2, carro)) {
+                if (checarColisao(barreira2, carro)) {
                     clearInterval(barreira2Intervalo);
                     gameOver1();
                 }
@@ -247,37 +218,61 @@
                 }
             }, 20);
         }
-
-        function checarColisao4(barreira2, carro) {
-            let reacao1 = barreira2.getBoundingClientRect();
-            let reacao2 = carro.getBoundingClientRect();
+        function checarColisao(moeda, carro) {
+            let reacaoMoeda = moeda.getBoundingClientRect();
+            let reacaoCarro = carro.getBoundingClientRect();
             return (
-                reacao1.right > reacao2.left &&
-                reacao1.left < reacao2.right &&
-                reacao1.bottom > reacao2.top &&
-                reacao1.top < reacao2.bottom
+                reacaoMoeda.right > reacaoCarro.left &&
+                reacaoMoeda.left < reacaoCarro.right &&
+                reacaoMoeda.bottom > reacaoCarro.top &&
+                reacaoMoeda.top < reacaoCarro.bottom
             );
         }
+
         function gameOver() {
-            alert("Acabou! Você bateu na polícia e a lei antitruste te pegou.\nVocê foi obrigado a deixar de ser um monopólio e tem que se dividir\nVocê fez " + pontuacao + " pontos antes de se dividir");
+            alert("Acabou! Você bateu na polícia e a lei antitruste te pegou.\nVocê foi obrigado a deixar de ser um monopólio e tem que se dividir\nVocê fez " + pontuacao1 + " pontos antes de se dividir");
             document.location.reload();
         }
         function gameOver1() {
-            alert("Acabou! Você bateu na pepsi e vai ter que vender água com açúcar para sempre\n Você fez " + pontuacao1 + " pontos antes de continuar na pepsi");
+            alert("Acabou! Você bateu na pepsi e vai ter que vender água com açúcar para sempre\n Você fez " + pontuacao + " pontos antes de continuar na pepsi");
             document.location.reload();
         }
+        function gameOver3() {
+            alert("Acabou! Você não foi dividida e continua a ter o monopólio");
+            reiniciarJogo();
+        }
+        function gameOver2() {
+            alert("Acabou! Você foi para Apple e mudou o mundo");
+            reiniciarJogo();
+        }
+        function reiniciarJogo() {
+            pontuacao = 0;
+            pontuacao1 = 0;
+            pontuacaoDisplay.textContent = pontuacao;
+            pontuacaoDisplay1.textContent = pontuacao1;
+            velocidade = 1000;
+            alert("O jogo reiniciou!");
 
+            clearInterval(intervaloMoeda);
+            clearInterval(intervaloMoeda2);
+            clearInterval(intervaloBarreira);
+            clearInterval(intervaloBarreira2);
+
+            intervaloMoeda = setInterval(criarMoeda, velocidade);
+            intervaloMoeda2 = setInterval(criarMoeda2, velocidade);
+            intervaloBarreira = setInterval(criarBarreira, velocidade);
+            intervaloBarreira2 = setInterval(criarBarreira2, velocidade);
+        }
         setInterval(criarMoeda, velocidade);
         setInterval(criarMoeda2, velocidade);
         setInterval(criarBarreira, velocidade);
         setInterval(criarBarreira2, velocidade);
 
-
-
         setInterval(() => {
             if (velocidade > 200) {
                 velocidade -= 100;
             }
+
         }, 10000);
 
     </script>
