@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta chardefinir="UTF-8">
@@ -73,38 +73,41 @@
         let pontuacao = 0
         let pontuacao1 = 0
         let velocidade = 1000
-        let carroPosição = 50
+        let carroPosicao = 50
 
 
-        function updatecarroPosição() {
-            carro.style.left = carroPosição + "%"
+        function atualizarposicaocarro() {
+            carro.style.left = carroPosicao + "%"
         }
 
         document.addEventListener("keydown", (event) => {
             let key = event.key;
-            if ((key === "a" || key === "ArrowLeft") && carroPosição > 5) {
+            if ((key === "a" || key === "ArrowLeft") && carroPosicao > 5) {
 
-                carroPosição -= 3
-                updatecarroPosição();
-            } else if ((key === "d" || key === "ArrowRight") && carroPosição < 95) {
+                carroPosicao -= 3
+                atualizarposicaocarro();
+            } else if ((key === "d" || key === "ArrowRight") && carroPosicao < 95) {
 
-                carroPosição += 3
-                updatecarroPosição();
+                carroPosicao += 3
+                atualizarposicaocarro();
             }
         });
         // moeda1
-        function mudarImagemMoeda(moeda, newImageSrc) {
-            moeda.style.backgroundImage = `url('${newImageSrc}')`;
+        function mudarImagemMoeda(moeda, imagem) {
+            moeda.style.backgroundImage = `url('${imagem}')`;
         }
 
         function criarMoeda() {
             let moeda = document.createElement("div")
             moeda.classList.add("moeda");
-            let randomLeft = Math.floor(Math.random() * (caixaJogo.clientWidth - 20));
-            moeda.style.left = randomLeft + "px"
-            caixaJogo.appendChild(moeda)
+            let randomizarmoeda = Math.floor(Math.random() * (caixaJogo.clientWidth - 20));
+            moeda.style.left = randomizarmoeda + "px";
+            moeda.style.top = "0";
+            caixaJogo.appendChild(moeda);
 
             mudarImagemMoeda(moeda, "Imagens/Apple-Logo_resized.png");
+            caixaJogo.appendChild(moeda);
+
             let moedaIntervalo = setInterval(() => {
                 let Topo = parseInt(moeda.style.top) || 0;
                 moeda.style.top = Topo + 5 + "px";
@@ -113,11 +116,16 @@
                     caixaJogo.removeChild(moeda);
                     pontuacao++;
                     pontuacaoDisplay.textContent = pontuacao;
+
+                    if (pontuacao >= 10) {
+
+                        clearInterval(moedaIntervalo);
+                        gameOver2();
+
+                    }
                 }
 
-                if (pontuacao >= 2) {
-                    gameOver2();
-                }
+
 
                 if (Topo >= caixaJogo.clientHeight - moeda.clientHeight) {
                     caixaJogo.removeChild(moeda);
@@ -126,15 +134,15 @@
         }
 
         //moeda2
-        function mudarImagemMoeda2(moeda2, newImageSrc) {
-            moeda2.style.backgroundImage = `url('${newImageSrc}')`;
+        function mudarImagemMoeda2(moeda2, imagem) {
+            moeda2.style.backgroundImage = `url('${imagem}')`;
         }
 
         function criarMoeda2() {
             let moeda2 = document.createElement("div");
             moeda2.classList.add("moeda2");
-            let randomLeft = Math.floor(Math.random() * (caixaJogo.clientWidth - 20));
-            moeda2.style.left = randomLeft + "px";
+            let randomizarmoeda = Math.floor(Math.random() * (caixaJogo.clientWidth - 20));
+            moeda2.style.left = randomizarmoeda + "px";
             caixaJogo.appendChild(moeda2);
 
             mudarImagemMoeda2(moeda2, "Imagens/att.png");
@@ -148,9 +156,11 @@
                     caixaJogo.removeChild(moeda2);
                     pontuacao1++;
                     pontuacaoDisplay1.textContent = pontuacao1;
-                }
-                if (pontuacao1 >= 2) {
-                    gameOver3();
+
+                    if (pontuacao1 >= 10) {
+                        clearInterval(moedaIntervalo);
+                        gameOver3();
+                    }
                 }
                 if (Topo >= caixaJogo.clientHeight - moeda2.clientHeight) {
                     caixaJogo.removeChild(moeda2);
@@ -163,8 +173,8 @@
         function criarBarreira() {
             let barreira = document.createElement("div");
             barreira.classList.add("barreira");
-            let randomLeft = Math.floor(Math.random() * (caixaJogo.clientWidth - 80));
-            barreira.style.left = randomLeft + "px";
+            let randomizarmoeda = Math.floor(Math.random() * (caixaJogo.clientWidth - 80));
+            barreira.style.left = randomizarmoeda + "px";
             barreira.style.top = "0";
             caixaJogo.appendChild(barreira);
 
@@ -194,8 +204,8 @@
         function criarBarreira2() {
             let barreira2 = document.createElement("div");
             barreira2.classList.add("barreira2");
-            let randomLeft = Math.floor(Math.random() * (caixaJogo.clientWidth - 80));
-            barreira2.style.left = randomLeft + "px";
+            let randomizarmoeda = Math.floor(Math.random() * (caixaJogo.clientWidth - 80));
+            barreira2.style.left = randomizarmoeda + "px";
             barreira2.style.top = "0";
             caixaJogo.appendChild(barreira2);
 
@@ -218,14 +228,14 @@
                 }
             }, 20);
         }
-        function checarColisao(moeda, carro) {
-            let reacaoMoeda = moeda.getBoundingClientRect();
+        function checarColisao(item, carro) {
+            let reacaoitem = item.getBoundingClientRect();
             let reacaoCarro = carro.getBoundingClientRect();
             return (
-                reacaoMoeda.right > reacaoCarro.left &&
-                reacaoMoeda.left < reacaoCarro.right &&
-                reacaoMoeda.bottom > reacaoCarro.top &&
-                reacaoMoeda.top < reacaoCarro.bottom
+                reacaoitem.right > reacaoCarro.left &&
+                reacaoitem.left < reacaoCarro.right &&
+                reacaoitem.bottom > reacaoCarro.top &&
+                reacaoitem.top < reacaoCarro.bottom
             );
         }
 
@@ -239,30 +249,13 @@
         }
         function gameOver3() {
             alert("Acabou! Você não foi dividida e continua a ter o monopólio");
-            reiniciarJogo();
+            document.location.reload();
         }
         function gameOver2() {
             alert("Acabou! Você foi para Apple e mudou o mundo");
-            reiniciarJogo();
+            document.location.reload();
         }
-        function reiniciarJogo() {
-            pontuacao = 0;
-            pontuacao1 = 0;
-            pontuacaoDisplay.textContent = pontuacao;
-            pontuacaoDisplay1.textContent = pontuacao1;
-            velocidade = 1000;
-            alert("O jogo reiniciou!");
 
-            clearInterval(intervaloMoeda);
-            clearInterval(intervaloMoeda2);
-            clearInterval(intervaloBarreira);
-            clearInterval(intervaloBarreira2);
-
-            intervaloMoeda = setInterval(criarMoeda, velocidade);
-            intervaloMoeda2 = setInterval(criarMoeda2, velocidade);
-            intervaloBarreira = setInterval(criarBarreira, velocidade);
-            intervaloBarreira2 = setInterval(criarBarreira2, velocidade);
-        }
         setInterval(criarMoeda, velocidade);
         setInterval(criarMoeda2, velocidade);
         setInterval(criarBarreira, velocidade);
